@@ -1,12 +1,35 @@
 @model UserGroupListPartEditViewModel
+@{
+    int usersCount = Model.SelectedUsers.Count;
+    int startIndex = 0;
+    int endIndex = startIndex + Model.SelectedUsers.Count - 1;
+}
+<script asp-name="bootstrap-select" depends-on="admin" at="Foot"></script>
+<style asp-name="bootstrap-select"></style>
 
+<Label>Select Users</Label>
 <div>
     <ul class="list-group with-checkbox">
+        <li class="list-group-item bg-light">
+            <div class="row">
+                <div class="form-group col mb-n1 text-nowrap">
+                    <div class="custom-control custom-checkbox mt-2 mr-n2">
+                        <input type="checkbox" class="custom-control-input" id="select-all">
+                        <label class="custom-control-label" for="select-all" id="select-all-label" title="@T["Select All"]"></label>
+                        <label id="items" for="select-all">@T.Plural(usersCount, "1 item", "{0} items")
+                            <span class="text-muted" title="@T["Items {0} to {1}", startIndex, endIndex]">@T.Plural(usersCount, " / {0} item in total", " / {0} items in total")</span>
+                        </label>
+                        <label id="selected-items" class="text-muted" for="select-all"></label>
+                    </div>
+                </div>
+                <div class="form-group col mb-n1 filter"></div>
+            </div>
+        </li>
         @for (int i = 0; i < Model.SelectedUsers.Count; i++)
         {
             <li class="list-group-item">
                 <div class="custom-control custom-checkbox float-left">
-                    <input type="checkbox" asp-for="@Model.SelectedUsers[i].IsInGroup" class="custom-control-input">
+                    <input type="checkbox" asp-for="@Model.SelectedUsers[i].IsInGroup"  name="itemIds" class="custom-control-input user-checkbox">
                     <label class="custom-control-label" ></label>
                     <input type="hidden" asp-for="@Model.SelectedUsers[i].GroupUser.Username" />
                     <input type="hidden" asp-for="@Model.SelectedUsers[i].GroupUser.Email" />      
@@ -19,3 +42,31 @@
         }
     </ul>
 </div>
+
+
+<script at="Foot" type="text/javascript">
+    $(function () {
+        $('.selectpicker').selectpicker();
+
+        var selectAllCtrl = $("#select-all");
+        var selectedItems = $("#selected-items");
+        var contentItemsCheckboxes = $(":checkbox[name='itemIds']");
+
+
+
+        selectAllCtrl.click(function(){
+            contentItemsCheckboxes.not(this).prop("checked", this.checked);
+            selectedItems.text($(":checkbox[name='itemIds']:checked").length + ' @T["selected"]');
+        });
+
+        contentItemsCheckboxes.on("click", function () {
+            var itemsCount = $(":checkbox[name='itemIds']").length;
+            var selectedItemsCount = $(":checkbox[name='itemIds']:checked").length;
+
+            selectAllCtrl.prop("checked", selectedItemsCount == itemsCount);
+            selectAllCtrl.prop("indeterminate", selectedItemsCount > 0 && selectedItemsCount < itemsCount);
+
+            selectedItems.text(selectedItemsCount + ' @T["selected"]');
+        });
+    })
+</script>

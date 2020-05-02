@@ -1,11 +1,11 @@
 using OrchardCore.Modules.Manifest;
 
 [assembly: Module(
-    Name = "UserGroup",
+    Name = "UserGroups",
     Author = "LefeWare Learning",
     Website = "https://orchardproject.net",
     Version = "1.0.0",
-    Description = "The UserGroup module provides user group management features.",
+    Description = "The UserGroups module provides user group management features.",
     Dependencies = new[]
     {
         "OrchardCore.Contents",
