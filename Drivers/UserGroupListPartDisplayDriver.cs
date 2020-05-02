@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using OrchardCore.ContentManagement;
 using OrchardCore.ContentManagement.Display.ContentDisplay;
 using OrchardCore.ContentManagement.Metadata;
@@ -40,16 +38,17 @@ namespace OrchardCore.UserGroup.Drivers
 
         public override async Task<IDisplayResult> EditAsync(UserGroupListPart part, BuildPartEditorContext context)
         {
-            var users = await _session.Query<User, UserIndex>().ListAsync();//User Service should have a function to get all users
+            var allUsers = await _session.Query<User, UserIndex>().ListAsync();//User Service should have a function to get all users
             return Initialize<UserGroupListPartEditViewModel>("UserGroupListPart_Edit", model =>
             {
-                foreach(var user in users)
+                foreach(var user in allUsers)
                 {
+                    var isUserInList = part.UserGroupMembers.FirstOrDefault(x=>x.Email == user.Email);
                     model.SelectedUsers.Add(
                         new GroupUserEditViewModel()
                         {
                             GroupUser = new GroupUser(){Username = user.UserName, Email = user.Email},
-                            IsInGroup = false// todo
+                            IsInGroup = isUserInList != null
                         }
                     );
 
@@ -63,7 +62,10 @@ namespace OrchardCore.UserGroup.Drivers
 
             if (await updater.TryUpdateModelAsync(model, Prefix, t=>t.SelectedUsers))
             {
-                part.UserGroupItems = model.SelectedUsers.Select(x=>x.GroupUser).ToList();;
+                part.UserGroupMembers = model.SelectedUsers
+                                        .Where(x=>x.IsInGroup)
+                                        .Select(x=>x.GroupUser)
+                                        .ToList();
             }
 
             return Edit(part);

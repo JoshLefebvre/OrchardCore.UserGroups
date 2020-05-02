@@ -1,25 +1,21 @@
 @model UserGroupListPartEditViewModel
 
-<nav class="admin-toolbar">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalUserGroupItems">
-        @T["Add UserGroup Item"]
-    </button>
-</nav>
-
 <div>
-    <ul id="users">
-        @foreach (var user in Model.SelectedUsers)
+    <ul class="list-group with-checkbox">
+        @for (int i = 0; i < Model.SelectedUsers.Count; i++)
         {
             <li class="list-group-item">
                 <div class="custom-control custom-checkbox float-left">
-                    <input type="checkbox" class="custom-control-input" value="41" name="itemIds" id="itemIds-41">
-                    <label class="custom-control-label" for="itemIds-41"></label>
+                    <input type="checkbox" asp-for="@Model.SelectedUsers[i].IsInGroup" class="custom-control-input">
+                    <label class="custom-control-label" ></label>
+                    <input type="hidden" asp-for="@Model.SelectedUsers[i].GroupUser.Username" />
+                    <input type="hidden" asp-for="@Model.SelectedUsers[i].GroupUser.Email" />      
                 </div>
 
                 <div class="header">
-                    <h5 class="float-left">@user.GroupUser.Username<span class="hint"> — @user.GroupUser.Email</span></h5>
+                    <h5 asp-for="" class="float-left">@Model.SelectedUsers[i].GroupUser.Username<span class="hint"> — @Model.SelectedUsers[i].GroupUser.Email</span></h5>
                 </div>
             </li>
         }
-    </ol>
+    </ul>
 </div>
