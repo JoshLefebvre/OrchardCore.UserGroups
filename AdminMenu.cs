@@ -30,7 +30,7 @@ namespace OrchardCore.UserGroup
             };
 
             builder.Add(S["Security"], design => design
-                    .Add(S["UserGroups"], "1.3", menus => menus
+                    .Add(S["User Groups"], "1.4", menus => menus
                         .Permission(Permissions.ManageUserGroups)
                         .Action("List", "Admin", rvd)
                         .LocalNav()
