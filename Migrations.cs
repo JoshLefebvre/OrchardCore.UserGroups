@@ -17,6 +17,10 @@ namespace OrchardCore.UserGroup
 
         public int Create()
         {
+            _contentDefinitionManager.AlterPartDefinition("UserGroupListPart", builder => builder
+                .Attachable()
+                .WithDescription("UserGroupListPart for fields related to user groups")
+            );
             
             _contentDefinitionManager.AlterTypeDefinition("UserGroup", builder => builder
                 .Listable()

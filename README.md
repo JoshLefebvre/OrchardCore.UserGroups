@@ -1,5 +1,6 @@
 # OrchardCore.UserGroups
-An Orchard Core module for creating Groups of Orchard Core users
+An Orchard Core module for creating Groups of Orchard Core users. The GroupPart can be attached to any existing content item to associate users with it.
+For example I am working on a project that offers courses, for each "Course" content itme I can attach a group of OC users that will have access to this course.
 
 - This project is still in early stages and not ready for consumption.
 
