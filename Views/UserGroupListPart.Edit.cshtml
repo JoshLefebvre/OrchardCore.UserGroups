@@ -29,7 +29,7 @@
         {
             <li class="list-group-item">
                 <div class="custom-control custom-checkbox float-left">
-                    <input type="checkbox" asp-for="@Model.SelectedUsers[i].IsInGroup"  name="itemIds" class="custom-control-input user-checkbox">
+                    <input type="checkbox" asp-for="@Model.SelectedUsers[i].IsInGroup" class="custom-control-input user-checkbox">
                     <label class="custom-control-label" ></label>
                     <input type="hidden" asp-for="@Model.SelectedUsers[i].GroupUser.Username" />
                     <input type="hidden" asp-for="@Model.SelectedUsers[i].GroupUser.Email" />      
@@ -43,6 +43,12 @@
     </ul>
 </div>
 
+<style>
+    /*For some reason the input boxes need to have a high z-index*/
+    .user-checkbox{
+        z-index: 1000;
+    }
+</style>
 
 <script at="Foot" type="text/javascript">
     $(function () {
@@ -50,18 +56,18 @@
 
         var selectAllCtrl = $("#select-all");
         var selectedItems = $("#selected-items");
-        var contentItemsCheckboxes = $(":checkbox[name='itemIds']");
+        var contentItemsCheckboxes = $(".user-checkbox");
 
 
 
         selectAllCtrl.click(function(){
             contentItemsCheckboxes.not(this).prop("checked", this.checked);
-            selectedItems.text($(":checkbox[name='itemIds']:checked").length + ' @T["selected"]');
+            selectedItems.text($(".user-checkbox:checked").length + ' @T["selected"]');
         });
 
         contentItemsCheckboxes.on("click", function () {
-            var itemsCount = $(":checkbox[name='itemIds']").length;
-            var selectedItemsCount = $(":checkbox[name='itemIds']:checked").length;
+            var itemsCount = $(".user-checkbox").length;
+            var selectedItemsCount = $(".user-checkbox:checked").length;
 
             selectAllCtrl.prop("checked", selectedItemsCount == itemsCount);
             selectAllCtrl.prop("indeterminate", selectedItemsCount > 0 && selectedItemsCount < itemsCount);
