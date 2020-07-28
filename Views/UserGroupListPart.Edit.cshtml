@@ -8,7 +8,7 @@
 <style asp-name="bootstrap-select"></style>
 
 <div class="form-group">
-    <Label>Select Users</Label>
+    <!--<Label>Select Users</Label> Use ContentTypePartSettings DisplayName and Description to set title-->
     <ul class="list-group with-checkbox">
         <li class="list-group-item bg-light">
             <div class="row">
@@ -17,30 +17,30 @@
                         <input type="checkbox" class="custom-control-input" id="select-all">
                         <label class="custom-control-label" for="select-all" id="select-all-label" title="@T["Select All"]"></label>
                         <label id="items" for="select-all">@T.Plural(usersCount, "1 item", "{0} items")
-                            <span class="text-muted" title="@T["Items {0} to {1}", startIndex, endIndex]">@T.Plural(usersCount, " / {0} item in total", " / {0} items in total")</span>
-                        </label>
-                        <label id="selected-items" class="text-muted" for="select-all"></label>
-                    </div>
+                        <span class="text-muted" title="@T["Items {0} to {1}", startIndex, endIndex]">@T.Plural(usersCount, " / {0} item in total", " / {0} items in total")</span>
+                    </label>
+                    <label id="selected-items" class="text-muted" for="select-all"></label>
                 </div>
-                <div class="form-group col mb-n1 filter"></div>
+            </div>
+            <div class="form-group col mb-n1 filter"></div>
+        </div>
+    </li>
+    @for (int i = 0; i < Model.SelectedUsers.Count; i++)
+    {
+        <li class="list-group-item">
+            <div class="custom-control custom-checkbox float-left">
+                <input type="checkbox" asp-for="@Model.SelectedUsers[i].IsInGroup" class="custom-control-input user-checkbox">
+                <label class="custom-control-label"></label>
+                <input type="hidden" asp-for="@Model.SelectedUsers[i].GroupUser.Username" />
+                <input type="hidden" asp-for="@Model.SelectedUsers[i].GroupUser.Email" />
+            </div>
+
+            <div class="header">
+                <h5 asp-for="" class="float-left">@Model.SelectedUsers[i].GroupUser.Username<span class="hint"> — @Model.SelectedUsers[i].GroupUser.Email</span></h5>
             </div>
         </li>
-        @for (int i = 0; i < Model.SelectedUsers.Count; i++)
-        {
-            <li class="list-group-item">
-                <div class="custom-control custom-checkbox float-left">
-                    <input type="checkbox" asp-for="@Model.SelectedUsers[i].IsInGroup" class="custom-control-input user-checkbox">
-                    <label class="custom-control-label" ></label>
-                    <input type="hidden" asp-for="@Model.SelectedUsers[i].GroupUser.Username" />
-                    <input type="hidden" asp-for="@Model.SelectedUsers[i].GroupUser.Email" />      
-                </div>
-
-                <div class="header">
-                    <h5 asp-for="" class="float-left">@Model.SelectedUsers[i].GroupUser.Username<span class="hint"> — @Model.SelectedUsers[i].GroupUser.Email</span></h5>
-                </div>
-            </li>
-        }
-    </ul>
+    }
+</ul>
 </div>
 
 <style>
